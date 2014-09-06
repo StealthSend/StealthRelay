@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>StealthRelay Documentation &mdash; StealthRelay 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="StealthRelay 1.2.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">StealthRelay 1.2.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="stealthrelay-documentation">
+<h1>StealthRelay Documentation<a class="headerlink" href="#stealthrelay-documentation" title="Permalink to this headline">¶</a></h1>
+<p>StealthRelay is a simple message relay that extracts
+an encrypted StealthText transaction from a local,
+designated mailbox. It then dispatches the encrypted transaction
+to the StealthCoin wallet where it is decrypted and
+broadcast to the StealthCoin Tor network.</p>
+<p>These instructions demonstrate how to set up a
+completely automated StealthText pipeline with
+a google voice number, the Thunderbird email program
+enabled with FiltaQuilla, and StealthRelay. All of
+these tools and services are completely free.</p>
+<div class="section" id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h2>
+<p><strong>Can I use a different SMS forwarding service
+from google voice or a different email program
+from Thunderbird?</strong></p>
+<p>Not at the moment. The email must be in
+a specific format created by gmail and saved
+in a specific format used by Thunderbird.
+In the future, we may support other popular services and
+clients upon request.</p>
+<p><strong>What if I already have an email program.</strong></p>
+<p>Thunderbird can run alongside other email
+programs. You may want to create a unique
+gmail account just for your StealthText
+pipeline.</p>
+<p><strong>Why does making a StealthText pipleine require
+so many steps?</strong></p>
+<p>All modern communication
+requires pipelines that themselves took
+many steps to create. StealthText is a brand new
+service, so no pipelines are presently in place.
+The situation is different for other services like
+email and www. These services have been around
+for decades and their pipelines are completely
+established, with little effort required from end users in
+most cases. Of course, I remember days in the
+1990s when it would take half a day and a call to the
+IT department to set up a POP email client!
+Welcome to the cutting edge of anonymous transactions.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Download StealthRelay at
+<a class="reference external" href="https://github.com/StealthSend/StealthRelay/Builds/">https://github.com/StealthSend/StealthRelay/Builds/</a>.</p>
+<p>In Windows, drag the StealthRelay program
+folder to your chosen location.
+In Linux, save the executable in ~/bin, /usr/local/bin,
+or similar.
+In OS X (not available yet),
+open the disk image file drag the StealthRelay program to
+the Applications folder of your hard drive.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Note where you put the StealthRelay program.</p>
+</div>
+</div>
+<div class="section" id="google-voice-number">
+<h2>Google Voice Number<a class="headerlink" href="#google-voice-number" title="Permalink to this headline">¶</a></h2>
+<p>For people in the US, complete instructions for creating a google
+voice number are here:
+<a class="reference external" href="http://voipsetup.info/how-to-register-for-a-google-voice-number/#more-9">http://voipsetup.info/how-to-register-for-a-google-voice-number/#more-9</a></p>
+</div>
+<div class="section" id="stealthcoin-configuration">
+<h2>StealthCoin Configuration<a class="headerlink" href="#stealthcoin-configuration" title="Permalink to this headline">¶</a></h2>
+<p>To use StealthRelay, you need to adjust your &#8220;StealthCoin.conf&#8221; file. You need
+to configure a couple of settings, modified for your set up. Be sure to choose
+a <tt class="docutils literal"><span class="pre">stealthsecret</span></tt> of at least 20 random characters. You do
+not need to memorize this secret. Choose a
+<tt class="docutils literal"><span class="pre">stealthpin</span></tt> that you can memorize but is hard to guess. A
+<tt class="docutils literal"><span class="pre">stealthpin</span></tt> may be a string of any characters and as long as you
+can memorize (you may have characters other than numbers).
+The <tt class="docutils literal"><span class="pre">stealthsecret</span></tt> will be entered into the settings of the
+StealthText Android application. You need to set <tt class="docutils literal"><span class="pre">server=1</span></tt>
+and <tt class="docutils literal"><span class="pre">daemon=1</span></tt> as well as <tt class="docutils literal"><span class="pre">rpcuser</span></tt> and <tt class="docutils literal"><span class="pre">rpcpassword</span></tt>.</p>
+<p>The following is an example &#8220;StealthCoin.conf&#8221; file that can be
+used with StealthText:</p>
+<div class="highlight-python"><pre>rpcpassword=32JFGpNLpKwQ8nWDz353L4iDwesnTt3OgOoG81wo
+rpcuser=xstrpc
+server=1
+daemon=1
+stealthsecret=XAI81pM0H81OGaeCQuXmXA7nP
+stealthpin=506$Saturn$effect$wife$dance$867</pre>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Don&#8217;t use the above password, secret, or pin!
+They are just examples.
+You may generate a memorable and strong <tt class="docutils literal"><span class="pre">stealthpin</span></tt> at
+<a class="reference external" href="https://www.xkpasswd.net/c/index.cgi">https://www.xkpasswd.net/c/index.cgi</a></p>
+</div>
+<p>You will not only want to have the StealthCoin Qt (or daemon)
+running, but you will also want to have the daemon available
+to accept the RPC (remote procedure calls) on behalf of the wallet.
+The daemon does not need to be running if the Qt is already running,
+but it gets launched by the relay every time an email comes in.
+Links to daemons for Linux, Windows, and Mac (not yet available)
+are on the bitcointalk forum OP
+(<a class="reference external" href="https://bitcointalk.org/index.php?topic=681725.0">https://bitcointalk.org/index.php?topic=681725.0</a>), and on the StealthCoin
+website (<a class="reference external" href="https://stealth-coin.com/">https://stealth-coin.com/</a>). Remember the place where
+you download the daemon as you will add that daemon
+to an email filter in the instructions below. Make sure
+you get the right daemon for your OS.</p>
+</div>
+<div class="section" id="email-client">
+<h2>Email Client<a class="headerlink" href="#email-client" title="Permalink to this headline">¶</a></h2>
+<p>You will need an email client that can (1) filter certain messages
+to a designated mailbox and (2) launch a specific program upon
+receipt of certain messages. The Thunderbird
+&lt;<a class="reference external" href="https://www.mozilla.org/en-US/Thunderbird/">https://www.mozilla.org/en-US/Thunderbird/</a>&gt; email program
+is free and can do both, if enabled with the FiltaQuilla addon.</p>
+<p>After downloading and installing Thunderbird, navigate to the menu
+selection <em>File -&gt; New -&gt; Existing Mail Account</em>, to set up
+your gmail account. Then, navigate to the menu selection
+<em>Tools -&gt; Add-ons</em> and install the FiltaQuilla addon.
+In the preferences for the FiltaQuilla addon, ensure that
+the option &#8220;Run File&#8221; is selected, under the &#8220;Filter Actions&#8221;
+tab of the preference pane.</p>
+<p>In Thunderbird, create a folder in &#8220;Local Folders&#8221; called &#8220;StealthRelay&#8221;.</p>
+<p>Use your mobile device to send your google voice number an SMS message.
+Then, go to you gmail inbox and find the email message corresponding
+to this SMS message. Note the &#8220;From:&#8221; address, which will look something
+like the following:</p>
+<div class="highlight-python"><pre>15555555555.15555551212.uniquestring@txt.voice.google.com</pre>
+</div>
+<p>This address should be used as the &#8220;confirm_address&#8221; in the
+StealthRelay configuration file, as described
+below.</p>
+<p>In Thunderbird, create a filter by navigating to the menu
+item &#8220;Tools -&gt; Message Filters&#8221;. The filter will be for the gmail
+account linked to your google voice number. Call the filter &#8220;StealthText&#8221;.
+Select &#8220;Match all of the following&#8221;.
+Add a &#8220;From&#8221;/&#8221;is&#8221; conditional for the &#64;txt.voice.google.com email
+above. Then, to the same filter, add a &#8220;Body&#8221;/&#8221;contains&#8221; conditional
+for a client ID. For this example, the client ID will be &#8220;w00t&#8221;.</p>
+<img alt="_images/filter.png" src="_images/filter.png" />
+<p>Perform two actions with the filter. First &#8220;Move Message to&#8221; the
+&#8220;StealthRelay on Local Folders&#8221;. Second &#8220;Run File&#8221; for the StealthRelay
+program.</p>
+<p>This filter will now run StealthRelay any time an email arrives
+from your mobile device and has the client identifier in it
+(w00t). When you fill your preferences in the StealthText Android
+application, ensure to enter the client ID exactly as it is
+in this filter.</p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Once installed, it is necessary to configure StealthRelay.
+In your home folder, edit a plain text file called
+&#8221;.stealthrelay&#8221; (note the leading period). It should
+have the following contents, edited as appropriate:</p>
+<div class="highlight-python"><pre>daemon = /Users/username/bin/StealthCoind
+sender = yourgoogleaccount@gmail.com
+username = yourgoogleaccount
+password = googlepassword
+server = smtp.gmail.com:587
+confirm_address = 15555555555.15555551212.uniquestring@txt.voice.google.com
+success = May the force be with you.
+fail = I am your father.</pre>
+</div>
+<p>The settings in &#8221;.stealthrelay&#8221; specify how the StealthRelay
+program behaves.</p>
+<ul class="simple">
+<li><strong>daemon</strong> - location of the StealthCoin wallet <em>daemon</em></li>
+<li><strong>sender</strong> - the google email account linked to google voice</li>
+<li><strong>username</strong> - google email user name</li>
+<li><strong>password</strong> - google email password</li>
+<li><strong>server</strong> - google&#8217;s mail server and port (no need to change)</li>
+<li><strong>confirm_address</strong> - confirmation info is sent to this email address</li>
+<li><strong>success</strong> - a message to indicate a successful transaction</li>
+<li><strong>fail</strong> - a message to indicate a failed transaction</li>
+</ul>
+<p>Another option, called <strong>mail</strong> allows you to specify the location
+of the Thunderbird profile folder in case this folder is in
+a non-standard location:</p>
+<div class="highlight-python"><pre>mail = /Path/To/Thunderbird/Profiles</pre>
+</div>
+<p>Be sure to save the &#8221;.stealthrelay&#8221; file or change its settings such
+that you are the only person who can read it. It is best
+to have a special gmail account just for StealthText
+transactions because the config file requires you to
+enter the gmail password as plain text.</p>
+<p>The <strong>confirm_address</strong> can be found in the &#8220;From:&#8221; section of
+an email created by sending an SMS message from your mobile device
+to your google voice number.</p>
+<p>StealthRelay will reply with a short message
+that indicates success or failure of the transaction. You can choose
+any messages you like for this purpose. After StealthRelay submits
+a transaction to the wallet, it will attempt to send an email to
+the <strong>confirm_address</strong> with the appropriate message. This address
+will direct the contents of the email back to the device that
+sent the StealthText transaction.</p>
+</div>
+<div class="section" id="ready">
+<h2>Ready!<a class="headerlink" href="#ready" title="Permalink to this headline">¶</a></h2>
+<p>If you have followed these instructions, you now have Thunderbird
+configured to save new StealthText messages from a specific mobile
+device into the local folder called &#8220;StealthRelay&#8221;. Thunderbird will
+then run &#8220;StealthRelay&#8221;, which finds the new email, extracts
+the encrypted transaction, and sends it to your StealthCoin wallet.
+StealthRelay will await a confirmation from the wallet, and
+send a message indicating success or failure of the transaction.</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">StealthRelay Documentation</a><ul>
+<li><a class="reference internal" href="#faq">FAQ</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#google-voice-number">Google Voice Number</a></li>
+<li><a class="reference internal" href="#stealthcoin-configuration">StealthCoin Configuration</a></li>
+<li><a class="reference internal" href="#email-client">Email Client</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#ready">Ready!</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">StealthRelay 1.2.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Hondo.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
+    </div>
+  </body>
+</html>
