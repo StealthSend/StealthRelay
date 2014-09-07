@@ -6,9 +6,12 @@ import platform
 import glob
 import subprocess
 import smtplib
+import re
 import Tkinter
 
 from ConfigParser import SafeConfigParser
+
+from string import printable
 
 class StealthRelayError(Exception):
   pass
@@ -112,21 +115,61 @@ def main():
     profiles = get_profiles(home)
   if profiles == None:
     raise ConfigError("Unable to find thunderbird profile.")
+  debug = config.get("debug", False)
+  if debug:
+    tk = Tkinter.Tk()
+    tk.title("StealthRelay")
+    txt = Tkinter.Text(tk)
+    txt.pack(expand=Tkinter.YES, fill=Tkinter.BOTH)
   stealthcoind = config['daemon']
   pattern = os.path.join(profiles, "*.default")
   default = glob.glob(pattern)[0]
   stealthtext = os.path.join(default, "Mail",
                              "Local Folders", "StealthRelay")
+  client_id = config['client_id']
+  rgx = '(%s,[A-Za-z0-9+/]+=*)(?:[^A-Za-z0-9+/=]|$)' % client_id
+  clientRE = re.compile(rgx)
+
   lines = iter(open(stealthtext).read().splitlines()[::-1])
+
+  subject = []
   for line in lines:
-    line = line.strip()
-    if line:
+    line = "".join([c for c in line if c in printable])
+    line = line.split()
+    line = "".join(line)
+    subject.append(line.strip())
+    if client_id in line:
       break
-  msg = lines.next().strip() + line
+  subject = "".join(subject[::-1])
+  # clientRE = re.compile('%s,[A-Za-z0-9+/=]+([^A-Za-z0-9+/=]|$)' % client_id)
+  print "----- subject -----"
+  print subject
+  print "----- subject -----"
+
+  m = clientRE.search(subject)
+  if m is None:
+    if debug:
+      txt.insert(Tkinter.END, "Could not find StealthText message.\n")
+    msg = "<<Parse Error>>"
+    print subject
+    raise SystemExit
+    
+  else:
+    msg = m.group(1)
+    if debug:
+      txt.insert(Tkinter.END, msg)
+  # lines = iter(open(stealthtext).read().splitlines()[::-1])
+  # for line in lines:
+  #   line = line.strip()
+  #   if line:
+  #     break
+  # msg = lines.next().strip() + line
   command = [stealthcoind, "decryptsend", "%s" % (msg,)]
   print "command is:"
   print command
   output = subprocess.check_output(command)
+  if debug:
+    txt.insert(Tkinter.END, "\n\n" + output.strip())
   # output = "test\n"
   sys.stderr.write(output)
   if "confirm_address" in config:
@@ -146,14 +189,6 @@ def main():
     message = "<No Message>"
     sender = "<No Sender>"
     receivers = []
-  debug = config.get("debug", False)
-  if debug:
-    tk = Tkinter.Tk()
-    tk.title("StealthRelay")
-    txt = Tkinter.Text(tk)
-    txt.pack(expand=Tkinter.YES, fill=Tkinter.BOTH)
-    txt.insert(Tkinter.END, msg)
-    txt.insert(Tkinter.END, "\n\n" + output.strip())
   if "confirm_address" in config:
     try:
       server = smtplib.SMTP(config['server'])
