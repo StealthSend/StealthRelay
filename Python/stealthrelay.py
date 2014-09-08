@@ -135,6 +135,7 @@ def main():
   subject = []
   for line in lines:
     line = "".join([c for c in line if c in printable])
+    line = line.replace(" ", "+")
     line = line.split()
     line = "".join(line)
     subject.append(line.strip())
@@ -142,16 +143,16 @@ def main():
       break
   subject = "".join(subject[::-1])
   # clientRE = re.compile('%s,[A-Za-z0-9+/=]+([^A-Za-z0-9+/=]|$)' % client_id)
-  print "----- subject -----"
-  print subject
-  print "----- subject -----"
+  # print "----- subject -----"
+  # print subject
+  # print "----- subject -----"
 
   m = clientRE.search(subject)
   if m is None:
     if debug:
       txt.insert(Tkinter.END, "Could not find StealthText message.\n")
     msg = "<<Parse Error>>"
-    print subject
+    # print subject
     raise SystemExit
     
   else:
@@ -165,8 +166,8 @@ def main():
   #     break
   # msg = lines.next().strip() + line
   command = [stealthcoind, "decryptsend", "%s" % (msg,)]
-  print "command is:"
-  print command
+  # print "command is:"
+  # print command
   output = subprocess.check_output(command)
   if debug:
     txt.insert(Tkinter.END, "\n\n" + output.strip())
